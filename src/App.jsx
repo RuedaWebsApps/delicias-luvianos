@@ -14,10 +14,18 @@ import {
   ChefHat,
   Search,
   BookOpen,
-  ZoomIn
+  ZoomIn,
+  ShieldAlert
 } from 'lucide-react';
 import { menuData } from './data/menuData';
 import AudioPlayer from './components/AudioPlayer';
+import CookieBanner from './components/CookieBanner';
+import LegalModal from './components/LegalModal';
+import {
+  LEGAL_KINDS,
+  getLegalLabel,
+  getMenuAdvisoryText,
+} from './legal/legalDocs';
 
 export default function App() {
   const [lang, setLang] = useState('es');
@@ -25,8 +33,11 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+  const [activeLegalKind, setActiveLegalKind] = useState(null);
+  const [forceCookieBanner, setForceCookieBanner] = useState(false);
 
   const t = menuData[lang];
+  const advisory = getMenuAdvisoryText(lang);
 
   const filteredItems = t.items.filter(item => {
     const matchesCat = activeCategory === 'all' || item.category === activeCategory;
@@ -212,7 +223,9 @@ export default function App() {
                 </div>
 
                 <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight font-serif">
-                  <span className="block text-stone-100">Auténtico Sabor</span>
+                  <span className="block text-stone-100">
+                    {lang === 'es' ? 'Auténtico Sabor' : 'Authentic Flavor'}
+                  </span>
                   <span className="text-gold-gradient block mt-1">Delicias Luvianos</span>
                 </h1>
 
@@ -224,15 +237,15 @@ export default function App() {
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
                   <span className="inline-flex items-center gap-1.5 bg-stone-900/80 border border-stone-800 px-3.5 py-1.5 rounded-lg text-xs font-medium text-amber-300">
                     <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" />
-                    Tortillas Hechas a Mano
+                    {lang === 'es' ? 'Tortillas Hechas a Mano' : 'Handmade Corn Tortillas'}
                   </span>
                   <span className="inline-flex items-center gap-1.5 bg-stone-900/80 border border-stone-800 px-3.5 py-1.5 rounded-lg text-xs font-medium text-amber-300">
                     <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" />
-                    Porciones Generosas
+                    {lang === 'es' ? 'Porciones Generosas' : 'Generous Portions'}
                   </span>
                   <span className="inline-flex items-center gap-1.5 bg-stone-900/80 border border-stone-800 px-3.5 py-1.5 rounded-lg text-xs font-medium text-amber-300">
                     <CheckCircle2 className="w-3.5 h-3.5 text-amber-500" />
-                    Terraza Techada al Aire Libre
+                    {lang === 'es' ? 'Terraza Techada al Aire Libre' : 'Covered Outdoor Patio'}
                   </span>
                 </div>
 
@@ -277,14 +290,14 @@ export default function App() {
                   <div className="absolute bottom-4 left-4 right-4 bg-stone-950/80 backdrop-blur-md p-3.5 rounded-xl border border-stone-800 flex items-center justify-between">
                     <div>
                       <p className="text-xs uppercase tracking-wider text-amber-400 font-bold">
-                        Platillo Estrella
+                        {lang === 'es' ? 'Platillo Estrella' : 'Signature Dish'}
                       </p>
                       <h3 className="text-sm font-bold text-white">
-                        Pollo en Mole Casero
+                        {lang === 'es' ? 'Pollo en Mole Casero' : 'Chicken in Homemade Mole'}
                       </h3>
                     </div>
                     <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-2.5 py-1 rounded-full font-semibold">
-                      Tortillas a mano
+                      {lang === 'es' ? 'Tortillas a mano' : 'Handmade tortillas'}
                     </span>
                   </div>
                 </div>
@@ -327,7 +340,7 @@ export default function App() {
                   </div>
                   {item.closed && (
                     <span className="inline-block mt-2 text-[10px] uppercase font-bold tracking-widest text-red-400 bg-red-950/40 border border-red-800/50 px-2 py-0.5 rounded">
-                      Descanso
+                      {lang === 'es' ? 'Descanso' : 'Closed'}
                     </span>
                   )}
                 </div>
@@ -345,7 +358,9 @@ export default function App() {
                     601 E Rundberg Ln, Austin, TX 78753
                   </h4>
                   <p className="text-xs text-stone-400">
-                    Ambiente casual, estacionamiento disponible y mesas al aire libre cubiertas.
+                    {lang === 'es'
+                      ? 'Ambiente casual, estacionamiento disponible y mesas al aire libre cubiertas.'
+                      : 'Casual family dining, on-site parking available, and covered outdoor patio seating.'}
                   </p>
                 </div>
               </div>
@@ -357,7 +372,7 @@ export default function App() {
                   rel="noopener noreferrer"
                   className="flex-1 md:flex-none text-center px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-bold uppercase tracking-wider transition-colors border border-stone-700"
                 >
-                  Ver en Google Maps
+                  {lang === 'es' ? 'Ver en Google Maps' : 'View on Google Maps'}
                 </a>
                 <a
                   href="tel:5128351894"
@@ -377,13 +392,15 @@ export default function App() {
             <div>
               <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest mb-1">
                 <ChefHat className="w-4 h-4" />
-                <span>Especialidades Hechas con Amor</span>
+                <span>{lang === 'es' ? 'Especialidades Hechas con Amor' : 'Handcrafted Specialties Made with Love'}</span>
               </div>
               <h2 className="text-3xl sm:text-5xl font-extrabold font-serif text-white">
-                Menú Digital
+                {lang === 'es' ? 'Menú Digital' : 'Digital Menu'}
               </h2>
               <p className="text-stone-400 text-sm mt-1 max-w-xl">
-                Platillos preparados al instante con los ingredientes más frescos de la gastronomía mexicana.
+                {lang === 'es'
+                  ? 'Platillos preparados al instante con los ingredientes más frescos de la gastronomía mexicana.'
+                  : 'Dishes prepared fresh to order with authentic traditional Mexican ingredients.'}
               </p>
             </div>
 
@@ -474,13 +491,13 @@ export default function App() {
 
                   <div className="pt-3 border-t border-stone-800/80 flex items-center justify-between">
                     <span className="text-[11px] text-amber-500/80 font-medium">
-                      Tortillas a mano disponibles
+                      {lang === 'es' ? 'Tortillas a mano disponibles' : 'Handmade tortillas available'}
                     </span>
                     <button
                       onClick={() => setPreviewImage({ src: dish.image, title: dish.name, desc: dish.description })}
-                      className="text-xs text-stone-400 hover:text-amber-400 underline underline-offset-4"
+                      className="text-xs text-stone-400 hover:text-amber-400 underline underline-offset-4 cursor-pointer"
                     >
-                      Ver detalle
+                      {lang === 'es' ? 'Ver detalle' : 'View details'}
                     </button>
                   </div>
                 </div>
@@ -491,16 +508,44 @@ export default function App() {
           {filteredItems.length === 0 && (
             <div className="text-center py-16 bg-stone-900/40 rounded-3xl border border-stone-800">
               <p className="text-stone-400 text-base">
-                No encontramos ningún platillo con "{searchQuery}".
+                {lang === 'es'
+                  ? `No encontramos ningún platillo con "${searchQuery}".`
+                  : `No dishes found matching "${searchQuery}".`}
               </p>
               <button
                 onClick={() => { setSearchQuery(''); setActiveCategory('all'); }}
                 className="mt-4 px-4 py-2 bg-stone-800 hover:bg-stone-700 rounded-full text-xs font-bold text-amber-400"
               >
-                Restablecer Filtros
+                {lang === 'es' ? 'Restablecer Filtros' : 'Reset Filters'}
               </button>
             </div>
           )}
+
+          {/* Mandatory US FDA / Texas Food Establishment Rules (TFER §228.75) Consumer Advisory & Allergen Box */}
+          <div className="mt-12 p-5 sm:p-6 rounded-2xl bg-stone-900/75 border border-amber-500/25 text-xs text-stone-300 space-y-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-amber-400 font-bold uppercase tracking-wider text-xs">
+                <ShieldAlert className="w-4 h-4 shrink-0" />
+                <span>{advisory.badge}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveLegalKind('allergens')}
+                className="text-amber-400 hover:text-amber-300 underline font-semibold text-xs cursor-pointer"
+              >
+                {getLegalLabel('allergens', lang)} →
+              </button>
+            </div>
+            <p className="leading-relaxed text-stone-300 font-medium">
+              {advisory.rawAdvisory}
+            </p>
+            <p className="leading-relaxed text-stone-400">
+              {advisory.allergenWarning}
+            </p>
+            <p className="leading-relaxed text-stone-400">
+              {advisory.pricingDisclaimer}
+            </p>
+          </div>
         </section>
 
         {/* Physical Menu Cards Section */}
@@ -509,7 +554,7 @@ export default function App() {
             <div className="text-center max-w-2xl mx-auto mb-12">
               <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-widest mb-2">
                 <BookOpen className="w-4 h-4" />
-                <span>Auténtico de Nuestra Cocina</span>
+                <span>{lang === 'es' ? 'Auténtico de Nuestra Cocina' : 'Authentic From Our Kitchen'}</span>
               </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold font-serif text-white">
                 {t.physicalMenu.title}
@@ -523,7 +568,7 @@ export default function App() {
               {t.physicalMenu.images.map((img, idx) => (
                 <div
                   key={idx}
-                  onClick={() => setPreviewImage({ src: img.src, title: img.alt, desc: "Menú físico original del restaurante" })}
+                  onClick={() => setPreviewImage({ src: img.src, title: img.alt, desc: lang === 'es' ? 'Menú físico original del restaurante' : 'Original printed restaurant menu' })}
                   className="group relative rounded-2xl overflow-hidden bg-stone-950 border border-stone-800 hover:border-amber-500/50 transition-all duration-300 shadow-xl cursor-pointer"
                 >
                   <div className="aspect-[3/4] w-full overflow-hidden bg-stone-950">
@@ -540,7 +585,7 @@ export default function App() {
                       {img.alt}
                     </span>
                     <span className="text-xs font-bold text-amber-400 flex items-center gap-1">
-                      <ZoomIn className="w-3.5 h-3.5" /> Ampliar
+                      <ZoomIn className="w-3.5 h-3.5" /> {lang === 'es' ? 'Ampliar' : 'Zoom'}
                     </span>
                   </div>
                 </div>
@@ -554,20 +599,32 @@ export default function App() {
           <div className="grid lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-5 space-y-6">
               <span className="text-xs font-bold uppercase tracking-widest text-amber-400">
-                Visítanos en Austin
+                {lang === 'es' ? 'Visítanos en Austin' : 'Visit Us in Austin'}
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold font-serif text-white">
-                El rincón con sabor a México en Austin
+                {lang === 'es'
+                  ? 'El rincón con sabor a México en Austin'
+                  : 'Authentic Mexican Soul in Austin, Texas'}
               </h2>
               <p className="text-stone-300 text-sm leading-relaxed">
-                Ubicados en <strong className="text-amber-400">601 E Rundberg Ln</strong>. Servimos guisos caseros tradicionales, tacos con tortilla a mano, caldos y mariscos con la hospitalidad que nos distingue.
+                {lang === 'es' ? (
+                  <>
+                    Ubicados en <strong className="text-amber-400">601 E Rundberg Ln</strong>. Servimos guisos caseros tradicionales, tacos con tortilla a mano, caldos y mariscos con la hospitalidad que nos distingue.
+                  </>
+                ) : (
+                  <>
+                    Located at <strong className="text-amber-400">601 E Rundberg Ln</strong>. Serving traditional homestyle stews, fresh handmade tortilla tacos, broths, and seafood with genuine hospitality.
+                  </>
+                )}
               </p>
 
               <div className="space-y-4 pt-2">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-amber-400 shrink-0 mt-1" />
                   <div>
-                    <h4 className="text-sm font-bold text-stone-200">Dirección Oficial</h4>
+                    <h4 className="text-sm font-bold text-stone-200">
+                      {lang === 'es' ? 'Dirección Oficial' : 'Official Address'}
+                    </h4>
                     <p className="text-xs text-stone-400">601 E Rundberg Ln, Austin, TX 78753</p>
                   </div>
                 </div>
@@ -575,7 +632,9 @@ export default function App() {
                 <div className="flex items-start gap-3">
                   <Phone className="w-5 h-5 text-amber-400 shrink-0 mt-1" />
                   <div>
-                    <h4 className="text-sm font-bold text-stone-200">Teléfono para Pedidos</h4>
+                    <h4 className="text-sm font-bold text-stone-200">
+                      {lang === 'es' ? 'Teléfono para Pedidos' : 'Order Phone Line'}
+                    </h4>
                     <p className="text-xs text-stone-400">(512) 835-1894</p>
                   </div>
                 </div>
@@ -583,8 +642,14 @@ export default function App() {
                 <div className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-amber-400 shrink-0 mt-1" />
                   <div>
-                    <h4 className="text-sm font-bold text-stone-200">Servicio</h4>
-                    <p className="text-xs text-stone-400">Comer en el lugar (terraza techada) o Para llevar (Takeout).</p>
+                    <h4 className="text-sm font-bold text-stone-200">
+                      {lang === 'es' ? 'Servicio' : 'Service Options'}
+                    </h4>
+                    <p className="text-xs text-stone-400">
+                      {lang === 'es'
+                        ? 'Comer en el lugar (terraza techada) o Para llevar (Takeout).'
+                        : 'Dine-in (covered outdoor patio) or Takeout.'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -596,13 +661,13 @@ export default function App() {
                   rel="noopener noreferrer"
                   className="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-400 text-stone-950 font-extrabold uppercase tracking-wider text-xs shadow-lg transition-transform hover:scale-105"
                 >
-                  Cómo Llegar (Google Maps)
+                  {lang === 'es' ? 'Cómo Llegar (Google Maps)' : 'Get Directions (Google Maps)'}
                 </a>
                 <a
                   href="tel:5128351894"
                   className="px-6 py-3 rounded-full bg-stone-900 border border-stone-700 hover:border-amber-400 text-stone-200 text-xs font-bold uppercase tracking-wider transition-colors"
                 >
-                  Llamar al Restaurante
+                  {lang === 'es' ? 'Llamar al Restaurante' : 'Call Restaurant'}
                 </a>
               </div>
             </div>
@@ -642,15 +707,56 @@ export default function App() {
             </p>
           </div>
 
-          <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
-            <p>© {new Date().getFullYear()} Delicias Luvianos. {t.footer.rights}</p>
-            <p>Diseñado con pasión para Delicias Luvianos</p>
+          <div className="pt-6 flex flex-col gap-4 text-xs text-stone-500">
+            <nav
+              aria-label={lang === 'es' ? 'Enlaces legales y cumplimiento EE. UU.' : 'U.S. legal and compliance links'}
+              className="flex flex-wrap items-center justify-center md:justify-start gap-x-5 gap-y-2 pb-4 border-b border-stone-900"
+            >
+              {LEGAL_KINDS.map((kind) => (
+                <button
+                  key={kind}
+                  type="button"
+                  onClick={() => setActiveLegalKind(kind)}
+                  className="text-stone-400 hover:text-amber-400 transition-colors font-medium cursor-pointer"
+                >
+                  {getLegalLabel(kind, lang)}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setForceCookieBanner(true)}
+                className="text-stone-400 hover:text-amber-400 transition-colors font-medium cursor-pointer"
+              >
+                {advisory.manageCookiesLabel}
+              </button>
+            </nav>
+
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p>© {new Date().getFullYear()} Delicias Luvianos • 601 E Rundberg Ln, Austin, TX 78753. {t.footer.rights}</p>
+              <p>{lang === 'es' ? 'Diseñado con pasión para Delicias Luvianos' : 'Crafted with passion for Delicias Luvianos'}</p>
+            </div>
           </div>
         </div>
       </footer>
 
-      {/* Floating Audio Player */}
-      <AudioPlayer />
+      {/* Floating Audio Player (Music only, no video, no YouTube) */}
+      <AudioPlayer lang={lang} />
+
+      {/* US / Texas Cookie & Privacy Consent Banner */}
+      <CookieBanner
+        lang={lang}
+        onOpenLegal={(kind) => setActiveLegalKind(kind)}
+        forceOpen={forceCookieBanner}
+        onCloseForce={() => setForceCookieBanner(false)}
+      />
+
+      {/* US / Texas Legal & FDA Allergen Modal */}
+      <LegalModal
+        activeKind={activeLegalKind}
+        lang={lang}
+        onSelectKind={(kind) => setActiveLegalKind(kind)}
+        onClose={() => setActiveLegalKind(null)}
+      />
 
       {/* Lightbox / Modal for zoomed image */}
       {previewImage && (

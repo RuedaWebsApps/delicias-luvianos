@@ -3,9 +3,74 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0a09" />
     <title>Delicias Luvianos | Menú Digital & Comida Tradicional Mexicana en Austin, TX</title>
-    <meta name="description" content="Auténtica comida tradicional mexicana en Austin, Texas. Tortillas hechas a mano, mole casero, barbacoa, caldos y antojitos en 601 E Rundberg Ln." />
+    <meta
+      name="description"
+      content="Auténtica comida tradicional mexicana en Austin, Texas (601 E Rundberg Ln). Tortillas hechas a mano, mole casero, barbacoa de chivo, mariscos, caldos y antojitos. Llama al (512) 835-1894."
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="restaurant.menu" />
+    <meta property="og:site_name" content="Delicias Luvianos Austin" />
+    <meta property="og:title" content="Delicias Luvianos | Auténtica Comida Tradicional Mexicana en Austin, TX" />
+    <meta
+      property="og:description"
+      content="Tortillas hechas a mano al momento, mole estilo Luvianos, barbacoa de chivo, mariscos y antojitos en 601 E Rundberg Ln, Austin, TX 78753."
+    />
+    <meta property="og:image" content="/logo.png" />
+    <meta property="og:locale" content="es_US" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Restaurant Schema.org JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "Delicias Luvianos",
+        "image": "/logo.png",
+        "description": "Auténtica comida tradicional mexicana en Austin, Texas. Famosos por nuestras tortillas hechas a mano al momento, porciones generosas y exquisito mole de la casa.",
+        "telephone": "+1-512-835-1894",
+        "servesCuisine": ["Mexican", "Tierra Caliente", "Guerrerense", "Seafood"],
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "601 E Rundberg Ln",
+          "addressLocality": "Austin",
+          "addressRegion": "TX",
+          "postalCode": "78753",
+          "addressCountry": "US"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 30.3609,
+          "longitude": -97.6929
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Tuesday", "Wednesday", "Thursday"],
+            "opens": "08:00",
+            "closes": "23:30"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Friday", "Saturday"],
+            "opens": "07:00",
+            "closes": "23:59"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "Sunday",
+            "opens": "06:00",
+            "closes": "23:59"
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="bg-stone-950 text-stone-100">
     <div id="root"></div>
